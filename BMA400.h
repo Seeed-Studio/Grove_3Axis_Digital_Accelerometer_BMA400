@@ -1,31 +1,31 @@
-/*    
- * A library for Grove - 3-Axis Digital Accelerometer ±2g to 16g Ultra-low Power(BMA400)
- *   
- * Copyright (c) 2018 seeed technology co., ltd.  
- * Author      : Wayen Weng  
- * Create Time : June 2018
- * Change Log  : 
- *
- * The MIT License (MIT)
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
+/*
+    A library for Grove - 3-Axis Digital Accelerometer ±2g to 16g Ultra-low Power(BMA400)
+
+    Copyright (c) 2018 seeed technology co., ltd.
+    Author      : Wayen Weng
+    Create Time : June 2018
+    Change Log  :
+
+    The MIT License (MIT)
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+*/
 
 #ifndef __BOSCH_BMA400_H__
 #define __BOSCH_BMA400_H__
@@ -164,68 +164,64 @@
 #define BMA400_SELF_TEST                0x7D
 #define BMA400_CMD                      0x7E
 
-enum power_type_t // power mode
-{
-	SLEEP = 0x00, // Stop conversion, the lowest power mode
-	LOW_POWER = 0x01, // 
-	NORMAL = 0x02, // 
+enum power_type_t { // power mode
+    SLEEP = 0x00, // Stop conversion, the lowest power mode
+    LOW_POWER = 0x01, //
+    NORMAL = 0x02, //
 };
 
-enum scale_type_t // measurement rage
-{
-	RANGE_2G = 0x00, // 
-	RANGE_4G = 0x01, // 
-	RANGE_8G = 0x02, // 
-    RANGE_16G = 0x03, // 
+enum scale_type_t { // measurement rage
+    RANGE_2G = 0x00, //
+    RANGE_4G = 0x01, //
+    RANGE_8G = 0x02, //
+    RANGE_16G = 0x03, //
 };
 
-enum odr_type_t // output data rate
-{
-	ODR_12 = 0x00, // 
-	ODR_25 = 0x06, // 
-	ODR_50 = 0x07, // 
-    ODR_100 = 0x08, // 
-    ODR_200 = 0x09, // 
-    ODR_400 = 0x0A, // 
-    ODR_800 = 0x0B, // 
+enum odr_type_t { // output data rate
+    ODR_12 = 0x00, //
+    ODR_25 = 0x06, //
+    ODR_50 = 0x07, //
+    ODR_100 = 0x08, //
+    ODR_200 = 0x09, //
+    ODR_400 = 0x0A, //
+    ODR_800 = 0x0B, //
 };
 
-class BMA400
-{
-    public:
-    
-        BMA400(void);
-        
-        bool isConnection(void);
-        
-        void initialize(void);
+class BMA400 {
+  public:
 
-        void setPoweMode(power_type_t mode);
-        void setFullScaleRange(scale_type_t range);
-        void setOutputDataRate(odr_type_t odr);
-        
-        void getAcceleration(float* x, float* y, float* z);
-        float getAccelerationX(void);
-        float getAccelerationY(void);
-        float getAccelerationZ(void);
-        
-        int16_t getTemperature(void);
-        
-        uint8_t getDeviceID(void);
-        
-        void reset(void);
-        
-    private:
-    
-        void write8(uint8_t reg, uint8_t val);
-        uint8_t read8(uint8_t reg);
-        uint16_t read16(uint8_t reg);
-        uint32_t read24(uint8_t reg);
-        void read(uint8_t reg, uint8_t *buf, uint16_t len);
-        
-        float accRange;
-        uint8_t devAddr;
-    
+    BMA400(void);
+
+    bool isConnection(void);
+
+    void initialize(void);
+
+    void setPoweMode(power_type_t mode);
+    void setFullScaleRange(scale_type_t range);
+    void setOutputDataRate(odr_type_t odr);
+
+    void getAcceleration(float* x, float* y, float* z);
+    float getAccelerationX(void);
+    float getAccelerationY(void);
+    float getAccelerationZ(void);
+
+    int16_t getTemperature(void);
+
+    uint8_t getDeviceID(void);
+
+    void reset(void);
+
+  private:
+
+    void write8(uint8_t reg, uint8_t val);
+    uint8_t read8(uint8_t reg);
+    uint16_t read16(uint8_t reg);
+    uint32_t read24(uint8_t reg);
+    void read(uint8_t reg, uint8_t* buf, uint16_t len);
+
+    float accRange;
+    uint8_t devAddr;
+
 };
 
 extern BMA400 bma400;
