@@ -1,4 +1,4 @@
-# Grove - 3-Axis Digital Accelerometer ±2g to 16g Ultra-low Power(BMA400)
+# Grove - 3-Axis Digital Accelerometer ±2g to 16g Ultra-low Power(BMA400)  [![Build Status](https://travis-ci.com/Seeed-Studio/Grove_3Axis_Digital_Accelerometer_BMA400.svg?branch=master)](https://travis-ci.com/Seeed-Studio/Grove_3Axis_Digital_Accelerometer_BMA400)
 
 ## Usage
     1.Git clone this resp to your Arduino IDE's libraries directory.
