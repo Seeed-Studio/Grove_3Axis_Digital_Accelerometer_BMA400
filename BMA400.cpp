@@ -25,18 +25,50 @@
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
+    
+    
+    
 */
 
 #include "BMA400.h"
+
 
 BMA400::BMA400(void) {
     devAddr = BMA400_ADDRESS;
 }
 
+
+void BMA400::readwrite(uint8_t reg, uint8_t* buf, uint16_t len, uint8_t rw){
+	uint8_t i = 0;
+	if (rw == 1)
+	{ //write
+		while (len-- > 0)
+		{
+			//Serial.print (reg, buf[i]);
+			write8(reg++, buf[i++]);
+		}
+	}
+	else
+	{ //read
+		while (len-- > 0)
+		{
+			buf[i++] = read8(reg++);
+			//Serial.print(reg-1, buf[i-1]);
+		}
+	}
+}
+
+
 void BMA400::initialize(void) {
     setPoweMode(NORMAL);
     setFullScaleRange(RANGE_4G);
     setOutputDataRate(ODR_200);
+    setOSR(OSR_LOWEST);
+    setFilter(ACC_FILT1);
+    enableGen1();
+    setRouteGen1();
+    configIntPin(); 
+	setLatch();  
 }
 
 bool BMA400::isConnection(void) {
@@ -83,6 +115,75 @@ void BMA400::setOutputDataRate(odr_type_t odr) {
     data = read8(BMA400_ACC_CONFIG_1);
     data = (data & 0xf0) | odr;
     write8(BMA400_ACC_CONFIG_1, data);
+}
+//method to set the data registers source
+void BMA400::setFilter(filter_type_t filter){
+	uint8_t data=0;
+	
+	data= read8(BMA400_ACC_CONFIG_2);
+	data= data & 0b11110011;
+	data= data| (filter<<2);
+	write8(BMA400_ACC_CONFIG_2,data);
+}
+
+//method to set the oversampling rate
+void BMA400::setOSR(overSampling_rate_t overSampling){
+	uint8_t data=0;
+	
+	data=read8(BMA400_ACC_CONFIG_1);
+	data=data&0b11001111;
+	data=data|(overSampling<<4);
+	write8(BMA400_ACC_CONFIG_1,data);
+}
+
+//method to enable the interrupt gen1
+void BMA400::enableGen1(void){
+	uint8_t data=0;
+	
+	data=read8(BMA400_INT_CONFIG_0);
+	data=data&0b11111011;
+	data=data|0b00000100;//0x04;
+	write8(BMA400_INT_CONFIG_0,data);
+}
+
+//method to map the gen1 interrupt signal on pin INT1
+void BMA400::setRouteGen1(void){
+	uint8_t data=0;
+	data=read8(BMA400_INT_1_MAP);
+	data=data&0b11111011;
+	data=data|0b00000100;//0x04;
+	write8(BMA400_INT_1_MAP,data);
+}
+
+//method to set the interrupt pins in configuration push-pull e active-high
+void BMA400::configIntPin(void){
+	uint8_t data=0;
+	
+	data=read8(BMA400_INT_1_2_CTRL);
+	data=data&0b11011101;
+	data=data|0b00100010;//0x22;
+	write8(BMA400_INT_1_2_CTRL,data);
+}
+
+//method to set the interrupt latching
+void BMA400::setLatch(void){
+	uint8_t data=0;
+	
+	data=read8(BMA400_INT_CONFIG_1);
+	data=data&0b01111111;
+	data=data|0x80;
+	write8(BMA400_INT_CONFIG_1, data);
+}
+
+bool BMA400::read0x0e(){
+	uint8_t data=0;
+	data=read8(BMA400_INT_STAT0);
+	data=data&0b00000100;
+	if(data>0)
+		return true;
+	else
+		return false;
+
 }
 
 void BMA400::getAcceleration(float* x, float* y, float* z) {
