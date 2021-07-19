@@ -33,7 +33,8 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-#define BMA400_ADDRESS                  0x15
+
+#define BMA400_ADDRESS                  0x14
 
 #define BMA400_CHIPID                   0x00
 #define BMA400_ERR_REG                  0x02
@@ -187,6 +188,20 @@ enum odr_type_t { // output data rate
     ODR_800 = 0x0B, //
 };
 
+enum filter_type_t{ // source for data registers
+	ACC_FILT1 = 0x00,
+	ACC_FILT2 = 0x01,
+	ACC_FILT_LP = 0x02,
+	ACC_FILT11  = 0X03,
+};
+
+enum overSampling_rate_t {
+	OSR_LOWEST=0x00,
+	OSR_LOW= 0x01,
+	OSR_HIGH=0x03,
+	OSR_HIGHEST=0x03,
+};
+
 class BMA400 {
   public:
 
@@ -199,6 +214,12 @@ class BMA400 {
     void setPoweMode(power_type_t mode);
     void setFullScaleRange(scale_type_t range);
     void setOutputDataRate(odr_type_t odr);
+    void setFilter(filter_type_t filter);
+    void setOSR(overSampling_rate_t overSampling); 	
+    void enableGen1(void);
+    void setRouteGen1(void);
+    void configIntPin(void);  
+	void setLatch(); 
 
     void getAcceleration(float* x, float* y, float* z);
     float getAccelerationX(void);
@@ -210,6 +231,10 @@ class BMA400 {
     uint8_t getDeviceID(void);
 
     void reset(void);
+    
+    void readwrite(uint8_t reg, uint8_t* buf, uint16_t len, uint8_t rw);
+    
+    bool read0x0e();
 
   private:
 
@@ -218,7 +243,7 @@ class BMA400 {
     uint16_t read16(uint8_t reg);
     uint32_t read24(uint8_t reg);
     void read(uint8_t reg, uint8_t* buf, uint16_t len);
-
+		
     float accRange;
     uint8_t devAddr;
 
