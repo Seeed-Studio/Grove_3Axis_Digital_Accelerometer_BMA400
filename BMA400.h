@@ -34,7 +34,7 @@
 #include <Wire.h>
 
 
-#define BMA400_ADDRESS                  0x14
+#define BMA400_ADDRESS                  0x15 // default setting
 
 #define BMA400_CHIPID                   0x00
 #define BMA400_ERR_REG                  0x02
